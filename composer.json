@@ -16,6 +16,11 @@
         }
     ],
     "minimum-stability": "stable",
+    "autoload": {
+        "psr-4": {
+            "ErrorNotifier\\": "src/"
+        }
+    },
     "require": {
       "php": ">=7.0"
     }

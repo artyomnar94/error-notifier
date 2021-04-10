@@ -1,7 +1,7 @@
 <?php
 
 
-namespace errorNotifier;
+namespace ErrorNotifier;
 
 
 use Throwable;
