@@ -1,0 +1,22 @@
+{
+    "name": "artyomnar/error-notifier",
+    "description": "Component writes message into log-file, notifies via telegram and set flash message",
+    "type": "library",
+    "keywords": ["yii2", "notifier", "wrapper", "telegram"],
+    "license": "MIT",
+    "support": {
+        "issues": "https://github.com/artyomnar94/error-notifier/issues",
+        "wiki": "https://github.com/artyomnar94/error-notifier/wiki",
+        "source": "https://github.com/artyomnar94/error-notifier"
+    },
+    "authors": [
+        {
+            "name": "Artyom Narmagambetov",
+            "email": "artyomnar94@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+      "php": ">=7.0"
+    }
+}
