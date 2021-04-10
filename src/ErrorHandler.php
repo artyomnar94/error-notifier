@@ -30,7 +30,7 @@ class ErrorHandler
 		self::setFlashMessage($flashMessageConfig);
     if (!YII_ENV_DEV) {
     		self::sendNotification($error, $message);
-    }
+    	}
 	}
 
 	/**
@@ -68,12 +68,12 @@ class ErrorHandler
 	}
 
   /**
-   * Generates html based message for telegram channel
-   *
-   * @param Throwable $error
-	 * @param string $message
-	 * @return string
-  */
+    * Generates html based message for telegram channel
+    *
+    * @param Throwable $error
+    * @param string $message
+    * @return string
+    */
 	private static function getMessageView(Throwable $error, string $message): string
 	{
     $environment = YII_ENV;
