@@ -28,10 +28,10 @@ class ErrorHandler
 		$message = $error->getMessage();
 		Yii::error($message, $category);
 		self::setFlashMessage($flashMessageConfig);
-    if (!YII_ENV_DEV) {
-    		self::sendNotification($error, $message);
-    	}
-	}
+		if (!YII_ENV_DEV) {
+				self::sendNotification($error, $message);
+			}
+		}
 
 	/**
 	 * Sets user flash message for showing on client side
@@ -67,21 +67,21 @@ class ErrorHandler
 		file_get_contents("https://api.telegram.org/bot$apiToken/sendMessage?" . http_build_query($data));
 	}
 
-  /**
-    * Generates html based message for telegram channel
-    *
-    * @param Throwable $error
-    * @param string $message
-    * @return string
-    */
+	/**
+	 * Generates html based message for telegram channel
+	 *
+	 * @param Throwable $error
+	 * @param string $message
+	 * @return string
+	 */
 	private static function getMessageView(Throwable $error, string $message): string
 	{
-    $environment = YII_ENV;
+    	$environment = YII_ENV;
 		return "<b>ENV: #$environment</b>
-      <b>Message: </b><i>$message</i>
-      <b> File: </b><i>{$error->getFile()}</i>
-      <b> Line: </b><i>{$error->getLine()}</i>
-      <pre>{$error->getTraceAsString()}</pre>";
+      		<b>Message: </b><i>$message</i>
+			<b> File: </b><i>{$error->getFile()}</i>
+			<b> Line: </b><i>{$error->getLine()}</i>
+			<pre>{$error->getTraceAsString()}</pre>";
 	}
 
 }
