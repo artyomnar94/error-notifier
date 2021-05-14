@@ -21,17 +21,21 @@ class ErrorHandler
 	 *
 	 * @param Throwable $error - error which has been thrown
 	 * @param FlashConfigurator | null $flashMessageConfig - if provided then flash message will set for user
+	 * @param string $message - text message, which provide into log file and telegram alert. By default will use message
+	 * from exception object.
 	 * @param string $category - the category of the log message
 	 */
-	public static function notify(Throwable $error,  $flashMessageConfig = null, string $category = 'application'): void
+	public static function notify(Throwable $error,  $flashMessageConfig = null, string $message = '', string $category = 'application'): void
 	{
-		$message = $error->getMessage();
+		if (empty($message)) {
+			$message = $error->getMessage();
+		}
 		Yii::error($message, $category);
 		self::setFlashMessage($flashMessageConfig);
 		if (!YII_ENV_DEV) {
-				self::sendNotification($error, $message);
-			}
+			self::sendNotification($error, $message);
 		}
+	}
 
 	/**
 	 * Sets user flash message for showing on client side
