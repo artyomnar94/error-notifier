@@ -32,11 +32,6 @@ class ErrorHandler
 	public $showSession = true;
 
 	/**
-	 * @var bool whether show $_SERVER parameters in telegram report message
-	 */
-	public $showServer = true;
-
-	/**
 	 * ErrorHandler constructor.
 	 * @param array $config - use for customization default attributes ['showSession' => false].
 	 */
@@ -119,6 +114,7 @@ class ErrorHandler
     	$environment = YII_ENV;
 		$reportMessage = "<b>ENV: #$environment</b>
       		<b>Message: </b><i>$message</i>
+      		<b>REQUEST_URI: </b><i>{$_SERVER['REQUEST_URI']}</i>
 			<b> File: </b><i>{$error->getFile()}</i>
 			<b> Line: </b><i>{$error->getLine()}</i>
 			<pre>{$error->getTraceAsString()}</pre>";
@@ -131,9 +127,6 @@ class ErrorHandler
 		}
 		if ($this->showSession) {
 			$reportMessage .= "<h3>SESSION:</h3><pre>" . $this->formatArrayToString($_SESSION) ."</pre>";
-		}
-		if ($this->showServer) {
-			$reportMessage .= "<h3>SERVER:</h3><pre>" . $this->formatArrayToString($_SERVER) ."</pre>";
 		}
 
 		return $reportMessage;
@@ -156,7 +149,6 @@ class ErrorHandler
 				$resultString .= $value;
 			}
 		}
-		$resultString .= '<br>';
 		return $resultString;
 	}
 }
