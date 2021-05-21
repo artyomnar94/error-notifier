@@ -37,6 +37,17 @@ class ErrorHandler
 	public $showServer = true;
 
 	/**
+	 * ErrorHandler constructor.
+	 * @param array $config - use for customization default attributes ['showSession' => false].
+	 */
+	public function __construct(array $config = [])
+	{
+		foreach ($config as $attribute => $value) {
+			$this->$attribute = $value;
+		}
+	}
+
+	/**
 	 * Notifies maintainers via log & telegram message and user via flash message
 	 *
 	 * @param Throwable $error - error which has been thrown
