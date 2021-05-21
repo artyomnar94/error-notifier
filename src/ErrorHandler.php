@@ -17,6 +17,26 @@ use Yii;
 class ErrorHandler
 {
 	/**
+	 * @var bool whether show $_GET parameters in telegram report message
+	 */
+	public $showGet = true;
+
+	/**
+	 * @var bool whether show $_POST parameters in telegram report message
+	 */
+	public $showPost = true;
+
+	/**
+	 * @var bool whether show $_SESSION parameters in telegram report message
+	 */
+	public $showSession = true;
+
+	/**
+	 * @var bool whether show $_SERVER parameters in telegram report message
+	 */
+	public $showServer = true;
+
+	/**
 	 * Notifies maintainers via log & telegram message and user via flash message
 	 *
 	 * @param Throwable $error - error which has been thrown
@@ -25,7 +45,7 @@ class ErrorHandler
 	 * from exception object.
 	 * @param string $category - the category of the log message
 	 */
-	public static function notify(Throwable $error,  $flashMessageConfig = null, string $message = '', string $category = 'application'): void
+	public function notify(Throwable $error,  $flashMessageConfig = null, string $message = '', string $category = 'application'): void
 	{
 		try {
 			if (empty($message)) {
@@ -63,13 +83,13 @@ class ErrorHandler
 	 * @param Throwable $error
 	 * @param string $message
 	 */
-	private static function sendNotification(Throwable $error, string $message): void
+	private function sendNotification(Throwable $error, string $message): void
 	{
 		$apiToken = Yii::$app->params['telegram_bot_token'];
 
 		$data = [
 			'chat_id' => Yii::$app->params['telegram_chat_id'],
-			'text' => self::getMessageView($error, $message),
+			'text' => $this->getMessageView($error, $message),
 			'parse_mode' => 'HTML'
 		];
 
@@ -83,14 +103,29 @@ class ErrorHandler
 	 * @param string $message
 	 * @return string
 	 */
-	private static function getMessageView(Throwable $error, string $message): string
+	private function getMessageView(Throwable $error, string $message): string
 	{
     	$environment = YII_ENV;
-		return "<b>ENV: #$environment</b>
+		$reportMessage = "<b>ENV: #$environment</b>
       		<b>Message: </b><i>$message</i>
 			<b> File: </b><i>{$error->getFile()}</i>
 			<b> Line: </b><i>{$error->getLine()}</i>
 			<pre>{$error->getTraceAsString()}</pre>";
+
+		if ($this->showGet) {
+			$reportMessage .= "<h3>GET:</h3><pre>" .print_r($_GET) ."</pre>";
+		}
+		if ($this->showPost) {
+			$reportMessage .= "<h3>POST:</h3><pre>" .print_r($_POST) ."</pre>";
+		}
+		if ($this->showSession) {
+			$reportMessage .= "<h3>SESSION:</h3><pre>" .print_r($_SESSION) ."</pre>";
+		}
+		if ($this->showServer) {
+			$reportMessage .= "<h3>SERVER:</h3><pre>" .print_r($_SERVER) ."</pre>";
+		}
+
+		return $reportMessage;
 	}
 
 }
