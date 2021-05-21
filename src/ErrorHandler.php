@@ -124,19 +124,39 @@ class ErrorHandler
 			<pre>{$error->getTraceAsString()}</pre>";
 
 		if ($this->showGet) {
-			$reportMessage .= "<h3>GET:</h3><pre>" .print_r($_GET) ."</pre>";
+			$reportMessage .= "<h3>GET:</h3><pre>" . $this->formatArrayToString($_GET) ."</pre>";
 		}
 		if ($this->showPost) {
-			$reportMessage .= "<h3>POST:</h3><pre>" .print_r($_POST) ."</pre>";
+			$reportMessage .= "<h3>POST:</h3><pre>" . $this->formatArrayToString($_POST) ."</pre>";
 		}
 		if ($this->showSession) {
-			$reportMessage .= "<h3>SESSION:</h3><pre>" .print_r($_SESSION) ."</pre>";
+			$reportMessage .= "<h3>SESSION:</h3><pre>" . $this->formatArrayToString($_SESSION) ."</pre>";
 		}
 		if ($this->showServer) {
-			$reportMessage .= "<h3>SERVER:</h3><pre>" .print_r($_SERVER) ."</pre>";
+			$reportMessage .= "<h3>SERVER:</h3><pre>" . $this->formatArrayToString($_SERVER) ."</pre>";
 		}
 
 		return $reportMessage;
 	}
 
+	/**
+	 * Formats provided array into user-friendly string.
+	 *
+	 * @param array $map
+	 * @return string
+	 */
+	private function formatArrayToString(array $map): string
+	{
+		$resultString = '';
+		foreach ($map as $key => $value) {
+			$resultString .= " [$key] => ";
+			if (is_array($value)) {
+				$resultString .= $this->formatArrayToString($value);
+			} else {
+				$resultString .= $value;
+			}
+		}
+		$resultString .= '<br>';
+		return $resultString;
+	}
 }
