@@ -119,14 +119,14 @@ class ErrorHandler
 			<b> Line: </b><i>{$error->getLine()}</i>
 			<pre>{$error->getTraceAsString()}</pre>";
 
-		if ($this->showGet) {
-			$reportMessage .= "<h3>GET:</h3><pre>" . $this->formatArrayToString($_GET) ."</pre>";
+		if ($this->showGet && !empty($_GET)) {
+			$reportMessage .= "<b>GET:</b><pre>" . $this->formatArrayToString($_GET) ."</pre>";
 		}
-		if ($this->showPost) {
-			$reportMessage .= "<h3>POST:</h3><pre>" . $this->formatArrayToString($_POST) ."</pre>";
+		if ($this->showPost && !empty($_POST)) {
+			$reportMessage .= "<b>POST:</b><pre>" . $this->formatArrayToString($_POST) ."</pre>";
 		}
-		if ($this->showSession) {
-			$reportMessage .= "<h3>SESSION:</h3><pre>" . $this->formatArrayToString($_SESSION) ."</pre>";
+		if ($this->showSession  && !empty($_SESSION)) {
+			$reportMessage .= "<b>SESSION:</b><pre>" . $this->formatArrayToString($_SESSION) ."</pre>";
 		}
 
 		return $reportMessage;
@@ -142,11 +142,15 @@ class ErrorHandler
 	{
 		$resultString = '';
 		foreach ($map as $key => $value) {
-			$resultString .= " [$key] => ";
-			if (is_array($value)) {
-				$resultString .= $this->formatArrayToString($value);
-			} else {
-				$resultString .= $value;
+			try {
+				$resultString .= " [$key] => ";
+				if (is_array($value)) {
+					$resultString .= $this->formatArrayToString($value);
+				} else {
+					$resultString .= strip_tags($value, '<b><i><pre>');
+				}
+			} catch (Throwable $exception) {
+				continue;
 			}
 		}
 		return $resultString;
