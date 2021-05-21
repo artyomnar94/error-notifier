@@ -27,13 +27,18 @@ class ErrorHandler
 	 */
 	public static function notify(Throwable $error,  $flashMessageConfig = null, string $message = '', string $category = 'application'): void
 	{
-		if (empty($message)) {
-			$message = $error->getMessage();
-		}
-		Yii::error($message, $category);
-		self::setFlashMessage($flashMessageConfig);
-		if (!YII_ENV_DEV) {
-			self::sendNotification($error, $message);
+		try {
+			if (empty($message)) {
+				$message = $error->getMessage();
+			}
+			self::setFlashMessage($flashMessageConfig);
+			if (YII_ENV_PROD) {
+				self::sendNotification($error, $message);
+			}
+		} catch (Throwable $exception) {
+			Yii::error("Fail on sending message to telegram : " . $exception->getMessage());
+		} finally {
+			Yii::error($message, $category);
 		}
 	}
 
